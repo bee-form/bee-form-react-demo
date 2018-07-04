@@ -1,12 +1,11 @@
-const {simple} = RlfDemo.RLF.tunnels;
-const {O, StringUtil} = RlfDemo.Utils;
+const omit = require("./objects").omit;
 
-exports.dateStr   = simple("text-ymd", {
+exports.dateStr = {
     format: (mv) => {
         return mv && moment(mv).format("MM-DD-YYYY");
     },
-    parse: (vv, getOldData) => {
-        if (StringUtil.isEmpty(vv)) {
+    parse: (vv, oldData) => {
+        if (vv == null || vv.length === 0) {
             return null;
         }
 
@@ -18,11 +17,10 @@ exports.dateStr   = simple("text-ymd", {
         if (!m.isValid()) {
             throw "Invalid Date";
         }
-        let oldData = getOldData();
         let newData = {
-            ...(oldData && O.omit(moment(oldData).toObject(), ["date", "months", "years"])),
-            ...O.omit(m.toObject(), ["hours", "minutes", "seconds", "milliseconds"])
+            ...(oldData && omit(moment(oldData).toObject(), ["date", "months", "years"])),
+            ...omit(m.toObject(), ["hours", "minutes", "seconds", "milliseconds"])
         };
         return moment(newData).toISOString();
     }
-});
+};

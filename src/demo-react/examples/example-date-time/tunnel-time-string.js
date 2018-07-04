@@ -1,21 +1,20 @@
-const {simple} = RlfDemo.RLF.tunnels;
-const {O, StringUtil} = RlfDemo.Utils;
+const omit = require("./objects").omit;
 
-exports.timeStr   = simple("text-hm", {
-    reformat: (vv) => {
-        if (vv == null) {
-            return null;
-        }
-        if (vv.length == 3 && vv.indexOf(":") == -1) {
-            vv = vv.substring(0, 2) + ":" + vv.substring(2);
-        }
-        return vv;
-    },
+exports.timeStr = {
+    // reformat: (vv) => {
+    //     if (vv == null) {
+    //         return null;
+    //     }
+    //     if (vv.length === 3 && vv.indexOf(":") === -1) {
+    //         vv = vv.substring(0, 2) + ":" + vv.substring(2);
+    //     }
+    //     return vv;
+    // },
     format: (mv) => {
         return mv && moment(mv).format("HH:mm");
     },
-    parse: (vv, getOldData) => {
-        if (StringUtil.isEmpty(vv)) {
+    parse: (vv, oldData) => {
+        if (vv == null || vv.length === 0) {
             return null;
         }
 
@@ -27,12 +26,11 @@ exports.timeStr   = simple("text-hm", {
         if (!m.isValid()) {
             throw "Invalid Date";
         }
-        let oldData = getOldData();
-        let oldDataYMD = (oldData && O.omit(moment(oldData).toObject(), ["hours", "minutes", "seconds", "milliseconds"]));
+        let oldDataYMD = (oldData && omit(moment(oldData).toObject(), ["hours", "minutes", "seconds", "milliseconds"]));
         let newData = {
             ...oldDataYMD,
-            ...O.omit(m.toObject(), ["date", "months", "years"])
+            ...omit(m.toObject(), ["date", "months", "years"])
         };
         return moment(newData).toISOString();
     }
-});
+};
