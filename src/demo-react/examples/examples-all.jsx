@@ -9,6 +9,8 @@ const examples = [
     require("./example-relative/example-relative-config"),
     require("./example-date/example-date-config"),
     require("./example-date-time/example-date-time-config"),
+    require("./example-debounce/example-debounce-config"),
+    require("./example-binds/example-binds-config"),
 ];
 
 export class ExamplesAll extends RComponent {
