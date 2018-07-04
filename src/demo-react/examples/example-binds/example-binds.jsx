@@ -1,5 +1,4 @@
-const {createForm, basicValidators: {required, equals}} = require("bee-form-react");
-const cln = require("classnames");
+const {createForm, basicValidators: {required}} = require("bee-form-react");
 
 export class ExampleBinds extends React.Component {
 
@@ -22,18 +21,18 @@ export class ExampleBinds extends React.Component {
         return (
             <div className="form">
 
-                <div className="">
+                <p className="">
                     The Bee Form is built around very simple concepts, making it easy to understand and use.
-                </div>
+                </p>
 
-                <div className="">
+                <p className="">
                     For example, the form view in many methods (`scope`, `withControl`), will return a version of itself,
                     only scoped down. The `map` method will provide a form view for each item in the mapped array data.
-                </div>
+                </p>
 
-                <div className="">
+                <p className="">
                     Here are different ways to bind an input
-                </div>
+                </p>
 
                 <div className="form-group">
                     <label className="control-label">Simple bind</label>
@@ -70,6 +69,12 @@ export class ExampleBinds extends React.Component {
                             className="form-control"
                         />
                 </div>
+
+                <p>
+                    Please also remember that there is no 2-ways binding here, this is not Angular 1, `bind` is simply
+                    a syntactic sugar to avoid multiple method calls . Also, every single state change in Bee Form is
+                    based on immutability.
+                </p>
             </div>
         );
     }
