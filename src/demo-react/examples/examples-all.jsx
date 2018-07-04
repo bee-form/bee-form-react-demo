@@ -3,10 +3,9 @@ import {ExampleBox} from "./example-box";
 
 const examples = [
     require("./example-login/example-login-config"),
-    // require("./example-login-blur/example-login-blur-config"),
-    // require("./example-async/example-async-config"),
-    // require("./example-list/example-list-config"),
-    // require("./example-list-2/example-list-2-config"),
+    require("./example-async/example-async-config"),
+    require("./example-list/example-list-config"),
+    require("./example-list-2/example-list-2-config"),
     // require("./example-relative/example-relative-config"),
     // require("./example-date/example-date-config"),
     // require("./example-date-time/example-date-time-config"),

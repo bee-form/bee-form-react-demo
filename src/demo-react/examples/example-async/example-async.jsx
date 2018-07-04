@@ -1,11 +1,11 @@
-const {bindDom, bindCom} = RlfDemo.RLF;
-const {required, async} = RlfDemo.RLF.validates;
+const {createForm, basicValidators: {required}} = require("bee-form-react");
+const cln = require("classnames");
 
 // Mock api for validating code
 function validateCode(code) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
-            resolve(code == "c1");
+            resolve(code === "c1");
         }, 600);
     });
 }
@@ -15,40 +15,48 @@ export class ExampleAsync extends React.Component {
     constructor(props, context) {
         super(props, context);
 
-        this.form = bindCom({
+        this.form = createForm({
             promotion_code: [
                 required,
-                async("promotion-code", validateCode) // by default, this will debounce 500ms before the check code api is called
+                {
+                    name: "promotion-code",
+                    validate: validateCode,
+                }
             ],
-        }, {
-            component: this,
         });
+
+        this.form.onChange(() => this.forceUpdate());
     }
 
     render() {
-        return bindDom(this.form)(
+
+        let fv = this.form.createView();
+
+        return (
             <div className="form">
 
                 {/* access_code input */}
-                <div
-                    lf-fg="promotion_code"
-                    className="form-group has-feedback"
-                >
-                    <label className="control-label">Promotion Code</label>
-                    <input
-                        lf-bind
-                        type="email"
-                        className="form-control"
-                        placeholder="Promotion Code"
-                    />
-                    <span className="form-control-feedback" lf-async-feedback aria-hidden="true"/>
-                    <p className="help-block" lf-err-msg="Promotion Code"/>
-                </div>
+                {fv.withControl("promotion_code", ({isValid, bind, getError}) => (
+                    <div
+                        className={cln("form-group", {"has-error": !isValid()})}
+                    >
+                        <label className="control-label">Promotion Code</label>
+                        <input
+                            {...bind()}
+                            type="email"
+                            className="form-control"
+                            placeholder="Promotion Code"
+                        />
+                        <p className="help-block">
+                            {getError()}
+                        </p>
+                    </div>
+                ))}
 
                 {/* Submit button */}
                 <button
                     type="submit" className="btn btn-primary"
-                    disabled={this.form.isInvalid()}
+                    disabled={!fv.isValid()}
                 >
                     Claim code
                 </button>

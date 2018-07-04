@@ -1,29 +1,5 @@
-import classnames from "classnames";
-const {bindDom, bindCom} = RlfDemo.RLF;
-const {Cols} = RlfDemo.Utils;
-const {required, maxLength, colNotEmpty} = RlfDemo.RLF.validates;
-
-const validationSchema = {
-    paths: {
-        clubName: [required],
-        "members": [colNotEmpty]
-    },
-    iterates: {
-        "members": {
-            paths: {
-                "firstName": [required],
-                "lastName": [required],
-                "hobbies": [maxLength(5)],
-            },
-            iterates: {
-                "hobbies": {
-                    "@": [required],
-                }
-            },
-
-        },
-    },
-};
+const {createForm, basicValidators: {required, maxLength, colNotEmpty}} = require("bee-form-react");
+const cln = require("classnames");
 
 export class ExampleList2 extends React.Component {
 
@@ -34,47 +10,62 @@ export class ExampleList2 extends React.Component {
             showErrors: false,
         };
 
-        this.form = bindCom(validationSchema, {
-            component: this,
+        this.form = createForm({
+            "clubName": [required],
+            "members": [colNotEmpty],
+            "members[*].firstName" : [required],
+            "members[*].lastName" : [required],
+            "members[*].hobbies" : [colNotEmpty, maxLength(5)],
+            "members[*].hobbies[*]" : [required],
         });
+
+        this.form.onChange(() => this.forceUpdate());
     }
 
     render() {
         const {showErrors} = this.state;
-        const form = this.form;
+        const fv = this.form.createView();
 
-        const renderField = (path, label, key) => (
+
+        let r = (label) => ({bind, isValid, getError}, key) => (
             <div
-                lf-fg={path}
-                className="form-group"
+                className={cln("form-group", {"has-error": !isValid()})}
                 key={key}
             >
                 <label className="control-label">{label}</label>
                 <input
-                    lf-bind
+                    {...bind()}
                     className="form-control"
                     placeholder={label}
                 />
-                <p className="help-block" lf-err-msg={label}/>
+                <p className="help-block">
+                    {getError()}
+                </p>
             </div>
         );
 
-        const renderHobby = (hobbyForm, j) => bindDom(hobbyForm)(
-            renderField("@", `Hobby #${j+1}`, `hobby-${j}`)
+        const renderHobby = (hfv, j) => (
+            r(`Hobby #${j+1}`)(hfv, `hobby-${j}`)
         );
 
-        const renderMember = (memberForm, i) => bindDom(memberForm)(
+        const renderMember = (mfv, i) => (
             <div className="box member-form" key={`member-${i}`}>
                 <h4>
                     Member #{i + 1}
                 </h4>
 
-                {renderField("firstName", "First Name")}
-                {renderField("lastName" , "Last Name")}
+                {mfv.withControl("firstName", r("First Name"))}
+                {mfv.withControl("lastName", r("Last Name"))}
 
-                {memberForm.toFormList("hobbies").map(renderHobby)}
+                {mfv.map("hobbies", renderHobby)}
 
-                {memberForm.getPathDataError("hobbies") && (
+                {mfv.getError("hobbies") === "col-not-empty" && (
+                    <div className="box text-danger">
+                        At least 1 hobbies is required
+                    </div>
+                )}
+
+                {mfv.getError("hobbies") === "max-length" && (
                     <div className="box text-danger">
                         No more than five hobbies allowed
                     </div>
@@ -83,7 +74,7 @@ export class ExampleList2 extends React.Component {
                 <div className="">
                     <button
                         className="btn btn-default"
-                        onClick={() => memberForm.changePathData("hobbies", (hobbies) => (hobbies || []).concat([""]))}
+                        onClick={() => mfv.changeValue("hobbies", (hobbies) => (hobbies || []).concat([""]))}
                     >
                         Add new hobby
                     </button>
@@ -93,7 +84,7 @@ export class ExampleList2 extends React.Component {
 
                     <button
                         className="btn btn-default"
-                        onClick={() => form.changePathData("members", (members) => Cols.remove1(members, memberForm.getData()))}
+                        onClick={() => fv.changeValue("members", (members) => members.filter((m) => m !== mfv.getData()) )}
                     >
                         Delete this member
                     </button>
@@ -101,23 +92,23 @@ export class ExampleList2 extends React.Component {
             </div>
         );
 
-        return bindDom(form)(
-            <div className={classnames("form example-list-2", showErrors && "show-errors")}>
+        return (
+            <div className={cln("form example-list-2", showErrors && "show-errors")}>
 
-                {renderField("clubName" , "Club Name")}
+                {fv.withControl("clubName", r("Club Name"))}
 
                 <div className="member-list">
-                    {form.getPathDataError("members") && (
+                    {fv.getError("members") && (
                         <div className="box text-danger">
                             At least one member must be entered
                         </div>
                     )}
 
-                    { form.toFormList("members").map(renderMember)}
+                    { fv.map("members", renderMember)}
 
                     <button
                         className="btn btn-default"
-                        onClick={() => form.changePathData("members", (members) => (members || []).concat([{}]))}
+                        onClick={() => fv.changeValue("members", (members) => (members || []).concat([{}]))}
                     >
                         Add new member
                     </button>
@@ -127,22 +118,18 @@ export class ExampleList2 extends React.Component {
                 {/* Submit button */}
                 <div className="btns">
                     <button
-                        type="submit" className={classnames("btn btn-primary", {disabled: this.form.isInvalid()})}
+                        type="submit" className={cln("btn btn-primary", {disabled: !fv.isValid()})}
                         onClick={() => {
-                            if (this.form.isInvalid()) {
+                            if (!fv.isValid()) {
                                 this.setState({showErrors: true});
-                                form.focusInvalidField();
                             } else {
-                                console.log("Submitting...", form.getData());
+                                console.log("Submitting...", fv.getData());
                             }
                         }}
                     >
                         Create questionnaire
                     </button>
 
-                    {this.form.isInvalid() && (
-                        <span className="help"> - click this to see errors (and focus)</span>
-                    )}
                 </div>
             </div>
         );
