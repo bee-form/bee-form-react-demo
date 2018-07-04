@@ -1,78 +1,57 @@
-const {bindDom, bindCom} = RlfDemo.RLF;
-const {required, email, minLength, simple} = RlfDemo.RLF.validates;
+const {createForm, basicValidators: {required, email, minLength, equalsPath}} = require("bee-form-react");
+const cln = require("classnames");
 
 export class ExampleRelative extends React.Component {
 
     constructor(props, context) {
         super(props, context);
 
-        this.form = bindCom({
+        this.form = createForm({
             email: [required, email],
             password: [required, minLength(6)],
-            confirm: [required, simple("confirm-password", (confirm, getRelativeData) => confirm == getRelativeData("password"))],
+            confirm: [required, equalsPath("password")],
         }, {
-            component: this,
-            data: {
-                email: "quanla2003@gmail.com"
-            },
+            email: "quanla2003@gmail.com"
         });
     }
 
     render() {
-        return bindDom(this.form)(
+        const fv = this.form.createView();
+
+        let r = (label, type, placeholder) => ({bind, isValid, getError}) => (
+            <div
+                className={cln("form-group", {"has-error": !isValid()})}
+            >
+                <label className="control-label">{label}</label>
+                <input
+                    {... bind()}
+                    type={type}
+                    className="form-control"
+                    placeholder={placeholder}
+                />
+                <p className="help-block">
+                    {getError()}
+                </p>
+            </div>
+        );
+        return (
             <div className="form">
 
                 <h3>Register</h3>
 
                 {/* Email input */}
-                <div
-                    lf-fg="email"
-                    className="form-group"
-                >
-                    <label className="control-label">Email address</label>
-                    <input
-                        lf-bind
-                        type="email"
-                        className="form-control"
-                        placeholder="Email"
-                    />
-                    <p className="help-block" lf-err-msg="Email"/>
-                </div>
+                {fv.withControl("email", r("Email address", "email", "Email"))}
 
                 {/* Password input */}
-                <div
-                    lf-fg="password"
-                    className="form-group"
-                >
-                    <label className="control-label">Password</label>
-                    <input
-                        lf-bind
-                        type="password"
-                        className="form-control"
-                        placeholder="Password"
-                    />
-                    <p className="help-block" lf-err-msg="Password"/>
-                </div>
+                {fv.withControl("password", r("Password", "password", "Password"))}
 
                 {/* Confirm password input */}
-                <div
-                    lf-fg="confirm"
-                    className="form-group"
-                >
-                    <label className="control-label">Confirm password</label>
-                    <input
-                        lf-bind
-                        type="password"
-                        className="form-control"
-                        placeholder="Password"
-                    />
-                    <p className="help-block" lf-err-msg="Confirm password"/>
-                </div>
+                {fv.withControl("confirm", r("Confirm password", "password", "Confirm password"))}
 
                 {/* Submit button */}
                 <button
                     type="submit" className="btn btn-primary"
-                    disabled={this.form.isInvalid()}
+                    disabled={!fv.isValid()}
                 >
                     Register
                 </button>
