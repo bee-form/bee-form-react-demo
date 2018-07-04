@@ -7,7 +7,7 @@ export class DemoLayout extends RComponent {
             <div className="demo-layout">
                 <header className="navbar navbar-default navbar-fixed-top navbar-inner">
                     <div className="container">
-                        RLF
+                        Bee Form React Demo
                     </div>
                 </header>
 
