@@ -13,6 +13,8 @@ export class ExampleRelative extends React.Component {
         }, {
             email: "quanla2003@gmail.com"
         });
+
+        this.form.onChange(() => this.forceUpdate());
     }
 
     render() {
