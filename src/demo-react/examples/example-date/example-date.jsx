@@ -1,41 +1,49 @@
+const {createForm, basicValidators: {required}} = require("bee-form-react");
+const cln = require("classnames");
+
 import {dateStr} from "./tunnel-date-string";
-const {bindDom, bindCom} = RlfDemo.RLF;
-const {required} = RlfDemo.RLF.validates;
 
 export class ExampleDate extends React.Component {
 
     constructor(props, context) {
         super(props, context);
 
-        this.form = bindCom({
-            meeting_date: [required],
-        }, {
-            component: this,
+        this.form = createForm({
+            meeting_date: {
+                validators: [required],
+                tunnel: [dateStr]
+            },
         });
+
+        this.form.onChange(() => this.forceUpdate());
     }
 
     render() {
-        return bindDom(this.form)(
+        const fv = this.form.createView();
+
+        return (
             <div className="form">
 
-                <div
-                    lf-fg="meeting_date"
-                    className="form-group"
-                >
-                    <label className="control-label">Meeting date</label>
-                    <input
-                        lf-bind
-                        lf-tunnel={[dateStr]}
-                        className="form-control"
-                        placeholder="Meeting date... MM-DD-YYYY"
-                    />
-                    <p className="help-block" lf-err-msg="Meeting date"/>
-                </div>
+                {fv.withControl("meeting_date", ({bind, isValid, getError}) => (
+                    <div
+                        className={cln("form-group", {"has-error": !isValid()})}
+                    >
+                        <label className="control-label">Meeting date</label>
+                        <input
+                            {...bind()}
+                            className="form-control"
+                            placeholder="Meeting date... MM-DD-YYYY"
+                        />
+                        <p className="help-block">
+                            {getError()}
+                        </p>
+                    </div>
+                ))}
 
                 {/* Submit button */}
                 <button
                     type="submit" className="btn btn-primary"
-                    disabled={this.form.isInvalid()}
+                    disabled={!fv.isValid()}
                 >
                     Add meeting
                 </button>

@@ -1,6 +1,4 @@
-const {simple} = RlfDemo.RLF.tunnels;
-
-exports.dateStr   = simple("text-month-year", {
+exports.dateStr   = {
     format: (mv) => {
         return mv && moment(mv).format("MM/DD/YYYY");
     },
@@ -18,4 +16,4 @@ exports.dateStr   = simple("text-month-year", {
         }
         return m.toISOString();
     }
-});
+};
