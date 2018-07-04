@@ -7,13 +7,12 @@ const Deploy = {
 
         PrototypePackager.packageServer(require("../prototype-server-config"), __dirname + "/../..").then(() => {
             let uploadedPath = process.cwd() + "/example.zip";
-            let deployDir = `/Users/quanle/Documents/Workon/personal/lf-demo-deploy`;
+            let deployDir = __dirname + `/../../docs`;
             extract(uploadedPath, {dir: deployDir}, function (err) {
                 fs.unlink(uploadedPath);
                 fs.unlink(deployDir + "/prototype-server.json");
             });
         });
-
     }
 };
 

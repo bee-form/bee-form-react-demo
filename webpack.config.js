@@ -5,7 +5,7 @@ module.exports = {
     entry: "./src/demo-react/demo-loader.jsx",
     output: {
         path: `${__dirname}/dist/js`,
-        filename: "rlf-demo.js"
+        filename: "bee-form-demo.js"
     },
     performance: {
         hints: false, // enum
