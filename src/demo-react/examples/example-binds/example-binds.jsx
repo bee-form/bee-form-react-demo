@@ -26,8 +26,8 @@ export class ExampleBinds extends React.Component {
                 </p>
 
                 <p className="">
-                    For example, the form view in many methods (`scope`, `withControl`), will return a version of itself,
-                    only scoped down. The `map` method will provide a form view for each item in the mapped array data.
+                    For example, the form view in many methods ("scope", "withControl"), will return a version of itself,
+                    only scoped down, or the "map" method will create a form view for each item in the mapped array data.
                 </p>
 
                 <p className="">
@@ -72,7 +72,7 @@ export class ExampleBinds extends React.Component {
 
                 <p>
                     Please also remember that there is no 2-ways binding here, this is not Angular 1, `bind` is simply
-                    a syntactic sugar to avoid multiple method calls . Also, every single state change in Bee Form is
+                    a syntactic sugar to avoid multiple method calls. Also, every single state change in Bee Form is
                     based on immutability.
                 </p>
             </div>
