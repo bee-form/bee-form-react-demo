@@ -40,9 +40,9 @@ export class ExampleBox extends RComponent {
                     ref={(formComp) => {
                         if (formComp && !initForm) {
                             formComp.form.onChange(() => {
-                                this.setState({data: formComp.form.createView().getData()});
+                                this.setState({data: formComp.form.getData()});
                             });
-                            return this.setState({data: formComp.form.createView().getData(), initForm: true});
+                            return this.setState({data: formComp.form.getData(), initForm: true});
                         }
                     }}
                 />
