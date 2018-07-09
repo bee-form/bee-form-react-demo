@@ -15,7 +15,13 @@ module.exports = {
             {
                 test: /\.jsx?$/,
                 exclude: (input) => {
-                    return input.indexOf("node_module") > -1 || input.indexOf("bee-form/") > -1;
+                    if (input.indexOf("node_modules/") > -1) {
+                        return true;
+                    }
+                    if (input.indexOf("bee-form-react-demo/") > -1) {
+                        return false;
+                    }
+                    return input.indexOf("bee-form/") > -1;
                 },
                 loader: 'babel-loader',
                 options: {
