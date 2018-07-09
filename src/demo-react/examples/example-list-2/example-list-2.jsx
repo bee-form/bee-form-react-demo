@@ -74,7 +74,7 @@ export class ExampleList2 extends React.Component {
                 <div className="">
                     <button
                         className="btn btn-default"
-                        onClick={() => mfv.changeValue("hobbies", (hobbies) => (hobbies || []).concat([""]))}
+                        onClick={() => mfv.scope("hobbies").changeValue((hobbies) => (hobbies || []).concat([""]))}
                     >
                         Add new hobby
                     </button>
@@ -84,7 +84,7 @@ export class ExampleList2 extends React.Component {
 
                     <button
                         className="btn btn-default"
-                        onClick={() => fv.changeValue("members", (members) => members.filter((m) => m !== mfv.getData()) )}
+                        onClick={() => fv.scope("members").changeValue((members) => members.filter((m) => m !== mfv.getData()) )}
                     >
                         Delete this member
                     </button>
@@ -108,7 +108,7 @@ export class ExampleList2 extends React.Component {
 
                     <button
                         className="btn btn-default"
-                        onClick={() => fv.changeValue("members", (members) => (members || []).concat([{}]))}
+                        onClick={() => fv.scope("members").changeValue((members) => (members || []).concat([{}]))}
                     >
                         Add new member
                     </button>

@@ -65,7 +65,7 @@ export class ExampleBinds extends React.Component {
                     <label className="control-label">2 calls bind</label>
                         <input
                             value={fv.getValue("name") || ""}
-                            onChange={(e) => fv.pushValue("name", e.target.value)}
+                            onChange={(e) => fv.pushValue(e.target.value, "name")}
                             className="form-control"
                         />
                 </div>

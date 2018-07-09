@@ -72,7 +72,7 @@ export class ExampleList extends React.Component {
 
                             <button
                                 className="btn btn-default"
-                                onClick={() => fv.changeValue("questions", (questions) => questions.filter((q) => q!==qfv.getData()))}
+                                onClick={() => fv.scope("questions").changeValue((questions) => questions.filter((q) => q!==qfv.getData()))}
                             >
                                 Delete this question
                             </button>
@@ -81,7 +81,7 @@ export class ExampleList extends React.Component {
 
                     <button
                         className="btn btn-default"
-                        onClick={() => fv.changeValue("questions", (questions) => (questions || []).concat([{}]))}
+                        onClick={() => fv.scope("questions").changeValue((questions) => (questions || []).concat([{}]))}
                     >
                         Add a question
                     </button>
