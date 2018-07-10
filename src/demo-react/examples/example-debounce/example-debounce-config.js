@@ -1,4 +1,4 @@
-import {ExampleDebounce} from "./example-debounce";
+import ExampleDebounce from "./example-debounce";
 
 module.exports = {
     title: "Debounce",

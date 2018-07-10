@@ -1,29 +1,21 @@
 import {dateStr} from "./tunnel-date-string";
 import {timeStr} from "./tunnel-time-string";
 
-const {createForm, basicValidators: {required}} = require("bee-form-react");
+const {connectForm, basicValidators: {required}} = require("bee-form-react");
 const cln = require("classnames");
 
-export class ExampleDateTime extends React.Component {
+const formConfig = {
+    "meeting_time": {
+        validators: [required],
+        "!date": [dateStr],
+        "!time": [timeStr],
+    },
+};
 
-    constructor(props, context) {
-        super(props, context);
-
-
-        this.form = createForm({
-            meeting_time: {
-                validators: [required],
-                "!date": [dateStr],
-                "!time": [timeStr],
-            },
-        });
-
-        this.form.onChange(() => this.forceUpdate());
-
-    }
+class ExampleDateTime extends React.Component {
 
     render() {
-        const fv = this.form.createView();
+        const {fv} = this.props;
 
         let r = (label, placeholder) => ({bind, isValid, getError}) => (
             <div
@@ -58,3 +50,5 @@ export class ExampleDateTime extends React.Component {
         );
     }
 }
+
+export default connectForm(ExampleDateTime, formConfig);

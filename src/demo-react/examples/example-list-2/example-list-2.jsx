@@ -1,7 +1,7 @@
-const {createForm, basicValidators: {required, maxLength, colNotEmpty}} = require("bee-form-react");
+const {connectForm, basicValidators: {required, maxLength, colNotEmpty}} = require("bee-form-react");
 const cln = require("classnames");
 
-export class ExampleList2 extends React.Component {
+class ExampleList2 extends React.Component {
 
     constructor(props, context) {
         super(props, context);
@@ -9,25 +9,13 @@ export class ExampleList2 extends React.Component {
         this.state = {
             showErrors: false,
         };
-
-        this.form = createForm({
-            "clubName": [required],
-            "members": [colNotEmpty],
-            "members[*].firstName" : [required],
-            "members[*].lastName" : [required],
-            "members[*].hobbies" : [colNotEmpty, maxLength(5)],
-            "members[*].hobbies[*]" : [required],
-        });
-
-        this.form.onChange(() => this.forceUpdate());
     }
 
     render() {
         const {showErrors} = this.state;
-        const fv = this.form.createView();
+        const {fv} = this.props;
 
-
-        let r = (label) => ({bind, isValid, getError}, key) => (
+        let renderField = (label) => ({bind, isValid, getError}, key) => (
             <div
                 className={cln("form-group", {"has-error": !isValid()})}
                 key={key}
@@ -44,58 +32,60 @@ export class ExampleList2 extends React.Component {
             </div>
         );
 
-        const renderHobby = (hfv, j) => (
-            r(`Hobby #${j+1}`)(hfv, `hobby-${j}`)
-        );
+        const renderMember = (mfv, i) => {
 
-        const renderMember = (mfv, i) => (
-            <div className="box member-form" key={`member-${i}`}>
-                <h4>
-                    Member #{i + 1}
-                </h4>
+            const renderHobby = (hfv, j) => (
+                renderField(`Hobby #${j+1}`)(hfv, `hobby-${j}`)
+            );
+            return (
+                <div className="box member-form" key={`member-${i}`}>
+                    <h4>
+                        Member #{i + 1}
+                    </h4>
 
-                {mfv.withControl("firstName", r("First Name"))}
-                {mfv.withControl("lastName", r("Last Name"))}
+                    {mfv.withControl("firstName", renderField("First Name"))}
+                    {mfv.withControl("lastName", renderField("Last Name"))}
 
-                {mfv.map("hobbies", renderHobby)}
+                    {mfv.map("hobbies", renderHobby)}
 
-                {mfv.getError("hobbies") === "col-not-empty" && (
-                    <div className="box text-danger">
-                        At least 1 hobbies is required
+                    {mfv.getError("hobbies") === "col-not-empty" && (
+                        <div className="box text-danger">
+                            At least 1 hobbies is required
+                        </div>
+                    )}
+
+                    {mfv.getError("hobbies") === "max-length" && (
+                        <div className="box text-danger">
+                            No more than five hobbies allowed
+                        </div>
+                    )}
+
+                    <div className="">
+                        <button
+                            className="btn btn-default"
+                            onClick={() => mfv.scope("hobbies").changeValue((hobbies) => (hobbies || []).concat([""]))}
+                        >
+                            Add new hobby
+                        </button>
                     </div>
-                )}
 
-                {mfv.getError("hobbies") === "max-length" && (
-                    <div className="box text-danger">
-                        No more than five hobbies allowed
+                    <div className="">
+
+                        <button
+                            className="btn btn-default"
+                            onClick={() => fv.scope("members").changeValue((members) => members.filter((m) => m !== mfv.getData()))}
+                        >
+                            Delete this member
+                        </button>
                     </div>
-                )}
-
-                <div className="">
-                    <button
-                        className="btn btn-default"
-                        onClick={() => mfv.scope("hobbies").changeValue((hobbies) => (hobbies || []).concat([""]))}
-                    >
-                        Add new hobby
-                    </button>
                 </div>
-
-                <div className="">
-
-                    <button
-                        className="btn btn-default"
-                        onClick={() => fv.scope("members").changeValue((members) => members.filter((m) => m !== mfv.getData()) )}
-                    >
-                        Delete this member
-                    </button>
-                </div>
-            </div>
-        );
+            );
+        };
 
         return (
             <div className={cln("form example-list-2", showErrors && "show-errors")}>
 
-                {fv.withControl("clubName", r("Club Name"))}
+                {fv.withControl("clubName", renderField("Club Name"))}
 
                 <div className="member-list">
                     {fv.getError("members") && (
@@ -135,3 +125,12 @@ export class ExampleList2 extends React.Component {
         );
     }
 }
+
+export default connectForm(ExampleList2, {
+    "clubName": [required],
+    "members": [colNotEmpty],
+    "members[*].firstName" : [required],
+    "members[*].lastName" : [required],
+    "members[*].hobbies" : [colNotEmpty, maxLength(5)],
+    "members[*].hobbies[*]" : [required],
+});

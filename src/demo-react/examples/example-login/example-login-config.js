@@ -1,4 +1,4 @@
-import {ExampleLogin} from "./example-login";
+import ExampleLogin from "./example-login";
 
 module.exports = {
     title: "Simple login",

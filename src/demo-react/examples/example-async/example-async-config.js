@@ -1,4 +1,4 @@
-import {ExampleAsync} from "./example-async";
+import ExampleAsync from "./example-async";
 
 module.exports = {
     title: "Async validation",

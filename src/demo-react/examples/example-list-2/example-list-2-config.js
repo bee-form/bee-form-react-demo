@@ -1,4 +1,4 @@
-import {ExampleList2} from "./example-list-2";
+import ExampleList2 from "./example-list-2";
 
 module.exports = {
     title: "List of data (#2) - resemble Redux example",

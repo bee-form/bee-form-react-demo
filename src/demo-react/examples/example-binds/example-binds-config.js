@@ -1,4 +1,4 @@
-import {ExampleBinds} from "./example-binds";
+import ExampleBinds from "./example-binds";
 
 module.exports = {
     title: "Ways to bind",

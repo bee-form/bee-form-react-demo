@@ -1,4 +1,4 @@
-import {ExampleRelative} from "./example-relative";
+import ExampleRelative from "./example-relative";
 
 module.exports = {
     title: "Validate with relative data reference",

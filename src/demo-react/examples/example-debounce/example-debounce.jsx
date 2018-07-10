@@ -1,24 +1,18 @@
-const {createForm, basicValidators: {required, equals}} = require("bee-form-react");
+const {connectForm, basicValidators: {required, equals}} = require("bee-form-react");
 const cln = require("classnames");
 
-export class ExampleDebounce extends React.Component {
+const formConfig = {
+    promotion_code: {
+        validators: [ required, equals("c1")],
+        debounce: 1000,
+    },
+};
 
-    constructor(props, context) {
-        super(props, context);
-
-        this.form = createForm({
-            promotion_code: {
-                validators: [ required, equals("c1")],
-                debounce: 1000,
-            },
-        });
-
-        this.form.onChange(() => this.forceUpdate());
-    }
+class ExampleDebounce extends React.Component {
 
     render() {
 
-        let fv = this.form.createView();
+        const {fv} = this.props;
 
         return (
             <div className="form">
@@ -52,3 +46,5 @@ export class ExampleDebounce extends React.Component {
         );
     }
 }
+
+export default connectForm(ExampleDebounce, formConfig);

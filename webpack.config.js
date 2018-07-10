@@ -21,7 +21,7 @@ module.exports = {
                     if (input.indexOf("bee-form-react-demo/") > -1) {
                         return false;
                     }
-                    return input.indexOf("bee-form/") > -1;
+                    return input.indexOf("bee-form/") > -1 || input.indexOf("bee-form-react/") > -1;
                 },
                 loader: 'babel-loader',
                 options: {

@@ -1,7 +1,13 @@
-const {createForm, basicValidators: {required, minLength, colNotEmpty}} = require("bee-form-react");
+const {connectForm, basicValidators: {required, minLength, colNotEmpty}} = require("bee-form-react");
 const cln = require("classnames");
 
-export class ExampleList extends React.Component {
+const formConfig = {
+    "title": [required, minLength(20)],
+    "questions": [colNotEmpty],
+    "questions[*].text": [required, minLength(20)],
+};
+
+class ExampleList extends React.Component {
 
     constructor(props, context) {
         super(props, context);
@@ -9,19 +15,11 @@ export class ExampleList extends React.Component {
         this.state = {
             showErrors: false,
         };
-
-        this.form = createForm({
-            title: [required, minLength(20)],
-            "questions": [colNotEmpty],
-            "questions[*].text": [required, minLength(20)],
-        });
-
-        this.form.onChange(() => this.forceUpdate());
     }
 
     render() {
         const {showErrors} = this.state;
-        const fv = this.form.createView();
+        const {fv} = this.props;
 
         return (
             <div className={cln("form example-list", showErrors && "show-errors")}>
@@ -109,3 +107,5 @@ export class ExampleList extends React.Component {
         );
     }
 }
+
+export default connectForm(ExampleList, formConfig);

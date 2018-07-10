@@ -1,4 +1,4 @@
-import {ExampleDateTime} from "./example-date-time";
+import ExampleDateTime from "./example-date-time";
 
 module.exports = {
     title: "Date and time combined",

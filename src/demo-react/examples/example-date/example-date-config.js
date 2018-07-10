@@ -1,4 +1,4 @@
-import {ExampleDate} from "./example-date";
+import ExampleDate from "./example-date";
 
 module.exports = {
     title: "Date string data type",

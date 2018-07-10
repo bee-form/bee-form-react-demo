@@ -1,4 +1,4 @@
-import {ExampleList} from "./example-list";
+import ExampleList from "./example-list";
 
 module.exports = {
     title: "List of data",

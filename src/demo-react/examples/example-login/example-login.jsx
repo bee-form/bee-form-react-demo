@@ -1,72 +1,63 @@
-const {createForm, basicValidators: {required, email, minLength}} = require("bee-form-react");
-const cln = require("classnames");
+import cln from "classnames";
 
-export class ExampleLogin extends React.Component {
+const {connectForm, basicValidators: {required, email, minLength}} = require("bee-form-react");
 
-    constructor(props, context) {
-        super(props, context);
+const formConfig = {
+    email: [required, email],
+    password: [required, minLength(6)],
+};
+const initData = {
+    email: "quanla2003@gmail.com"
+};
 
-        this.form = createForm({
-            email: [required, email],
-            password: [required, minLength(6)],
-        }, {
-            email: "quanla2003@gmail.com"
-        });
+const ExampleLogin = ({fv}) => (
+    <div className="form">
 
-        this.form.onChange(() => this.forceUpdate());
-    }
-
-    render() {
-        let fv = this.form.createView();
-
-        return (
-            <div className="form">
-
-                {/* Email input */}
-                {fv.withControl("email", ({bind, getError, hasError}) => (
-                    <div
-                        className={cln("form-group", {"has-error": hasError()})}
-                    >
-                        <label className="control-label">Email address</label>
-                        <input
-                            {... bind()}
-                            type="email"
-                            className="form-control"
-                            placeholder="Email"
-                        />
-                        <p className="help-block">
-                            {getError()}
-                        </p>
-                    </div>
-                ))}
-
-                {/* Password input */}
-                {fv.withControl("password", ({bind, getError, hasError}) => (
-                    <div
-                        className={cln("form-group", {"has-error": hasError()})}
-                    >
-                        <label className="control-label">Password</label>
-
-                        <input
-                            {... bind()}
-                            type="password"
-                            className="form-control"
-                            placeholder="Password"
-                        />
-                        <p className="help-block">
-                            {getError()}
-                        </p>
-                    </div>
-                ))}
-
-                {/* Submit button */}
-                <button
-                    type="submit" className="btn btn-primary"
-                    disabled={!fv.isValid()}
-                >
-                    Login
-                </button>
+        {/* Email input */}
+        {fv.withControl("email", ({bind, getError, hasError}) => (
+            <div
+                className={cln("form-group", {"has-error": hasError()})}
+            >
+                <label className="control-label">Email address</label>
+                <input
+                    {... bind()}
+                    type="email"
+                    className="form-control"
+                    placeholder="Email"
+                />
+                <p className="help-block">
+                    {getError()}
+                </p>
             </div>
-        );
-    }
-}
+        ))}
+
+        {/* Password input */}
+        {fv.withControl("password", ({bind, getError, hasError}) => (
+            <div
+                className={cln("form-group", {"has-error": hasError()})}
+            >
+                <label className="control-label">Password</label>
+
+                <input
+                    {... bind()}
+                    type="password"
+                    className="form-control"
+                    placeholder="Password"
+                />
+                <p className="help-block">
+                    {getError()}
+                </p>
+            </div>
+        ))}
+
+        {/* Submit button */}
+        <button
+            type="submit" className="btn btn-primary"
+            disabled={!fv.isValid()}
+        >
+            Login
+        </button>
+    </div>
+);
+
+export default connectForm(ExampleLogin, formConfig, initData);
