@@ -13,14 +13,8 @@ export class ExampleDateTime extends React.Component {
         this.form = createForm({
             meeting_time: {
                 validators: [required],
-                faces: {
-                    "date": {
-                        tunnel: [dateStr]
-                    },
-                    "time": {
-                        tunnel: [timeStr]
-                    },
-                },
+                "!date": [dateStr],
+                "!time": [timeStr],
             },
         });
 

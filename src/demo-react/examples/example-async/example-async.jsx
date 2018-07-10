@@ -29,7 +29,6 @@ export class ExampleAsync extends React.Component {
     }
 
     render() {
-
         let fv = this.form.createView();
 
         return (
