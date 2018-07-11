@@ -1,3 +1,5 @@
+import QuestionForm from "./question-form";
+
 const {connectForm, basicValidators: {required, minLength, colNotEmpty}} = require("bee-form-react");
 const cln = require("classnames");
 
@@ -50,31 +52,11 @@ class ExampleList extends React.Component {
                     )}
 
                     { fv.map("questions", (qfv, i) => (
-                        <div className="box question-form" key={i}>
-
-                            {qfv.withControl("text", ({bind, isValid, getError}) => (
-                                <div
-                                    className={cln("form-group", {"has-error": !isValid()})}
-                                >
-                                    <label className="control-label">Question text</label>
-                                    <input
-                                        {... bind()}
-                                        className="form-control"
-                                        placeholder="Question text..."
-                                    />
-                                    <p className="help-block">
-                                        {getError()}
-                                    </p>
-                                </div>
-                            ))}
-
-                            <button
-                                className="btn btn-default"
-                                onClick={() => fv.scope("questions").changeValue((questions) => questions.filter((q) => q!==qfv.getData()))}
-                            >
-                                Delete this question
-                            </button>
-                        </div>
+                      <QuestionForm
+                        fv={qfv}
+                        onDelete={() => fv.scope("questions").changeValue((questions) => questions.filter((q) => q!==qfv.getData()))}
+                        key={i}
+                      />
                     ))}
 
                     <button

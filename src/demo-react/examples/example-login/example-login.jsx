@@ -50,6 +50,15 @@ const ExampleLogin = ({fv}) => (
             </div>
         ))}
 
+      {fv.withControl("remember", ({getValue, changeValue}) => (
+        <div className="checkbox">
+          <label>
+            <input type="checkbox" checked={!!getValue()} onClick={() => changeValue((old) => !old)} />
+            Remember me
+          </label>
+        </div>
+      ))}
+
         {/* Submit button */}
         <button
             type="submit" className="btn btn-primary"

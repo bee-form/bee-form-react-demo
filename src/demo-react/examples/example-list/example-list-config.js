@@ -6,6 +6,6 @@ module.exports = {
     component: ExampleList,
     codes: [
         require("!raw-loader!./example-list.jsx"),
+        {name: "question-form.jsx", code: require("!raw-loader!./question-form.jsx")},
     ]
 };
-
