@@ -1,5 +1,16 @@
+import {errBox, errMsg} from "../common/err-msg";
+
 const {connectForm, basicValidators: {required, maxLength, colNotEmpty}} = require("bee-form-react");
 const cln = require("classnames");
+
+const formConfig = {
+    "clubName": [required],
+    "members": [colNotEmpty],
+    "members[*].firstName" : [required],
+    "members[*].lastName" : [required],
+    "members[*].hobbies" : [colNotEmpty, maxLength(5)],
+    "members[*].hobbies[*]" : [required],
+};
 
 class ExampleList2 extends React.Component {
 
@@ -15,7 +26,7 @@ class ExampleList2 extends React.Component {
         const {showErrors} = this.state;
         const {fv} = this.props;
 
-        let renderField = (label) => ({bind, isValid, getError}, key) => (
+        let renderField = (label) => ({bind, isValid, withError}, key) => (
             <div
                 className={cln("form-group", {"has-error": !isValid()})}
                 key={key}
@@ -26,9 +37,8 @@ class ExampleList2 extends React.Component {
                     className="form-control"
                     placeholder={label}
                 />
-                <p className="help-block">
-                    {getError()}
-                </p>
+
+                {withError(errMsg(label))}
             </div>
         );
 
@@ -48,17 +58,7 @@ class ExampleList2 extends React.Component {
 
                     {mfv.map("hobbies", renderHobby)}
 
-                    {mfv.getError("hobbies") === "col-not-empty" && (
-                        <div className="box text-danger">
-                            At least 1 hobbies is required
-                        </div>
-                    )}
-
-                    {mfv.getError("hobbies") === "max-length" && (
-                        <div className="box text-danger">
-                            No more than five hobbies allowed
-                        </div>
-                    )}
+                    {mfv.withError("hobbies", errBox("hobbies"))}
 
                     <div className="">
                         <button
@@ -88,11 +88,7 @@ class ExampleList2 extends React.Component {
                 {fv.withControl("clubName", renderField("Club Name"))}
 
                 <div className="member-list">
-                    {fv.getError("members") && (
-                        <div className="box text-danger">
-                            At least one member must be entered
-                        </div>
-                    )}
+                    {fv.withError("members", errBox("members"))}
 
                     { fv.map("members", renderMember)}
 
@@ -125,12 +121,4 @@ class ExampleList2 extends React.Component {
         );
     }
 }
-
-export default connectForm(ExampleList2, {
-    "clubName": [required],
-    "members": [colNotEmpty],
-    "members[*].firstName" : [required],
-    "members[*].lastName" : [required],
-    "members[*].hobbies" : [colNotEmpty, maxLength(5)],
-    "members[*].hobbies[*]" : [required],
-});
+export default connectForm(ExampleList2, formConfig);

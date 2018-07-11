@@ -1,4 +1,5 @@
 import QuestionForm from "./question-form";
+import {errMsg} from "../common/err-msg";
 
 const {connectForm, basicValidators: {required, minLength, colNotEmpty}} = require("bee-form-react");
 const cln = require("classnames");
@@ -27,7 +28,7 @@ class ExampleList extends React.Component {
             <div className={cln("form example-list", showErrors && "show-errors")}>
 
                 {/* access_code input */}
-                {fv.withControl("title", ({bind, isValid, getError}) => (
+                {fv.withControl("title", ({bind, isValid, withError}) => (
                     <div
                         className={cln("form-group", {"has-error": !isValid()})}
                     >
@@ -37,9 +38,8 @@ class ExampleList extends React.Component {
                             className="form-control"
                             placeholder="Questionnaire title..."
                         />
-                        <p className="help-block">
-                            {getError()}
-                        </p>
+
+                        {withError(errMsg("Questionnaire title"))}
                     </div>
                 ))}
 

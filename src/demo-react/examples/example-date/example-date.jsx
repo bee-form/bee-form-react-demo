@@ -1,3 +1,5 @@
+import {errMsg} from "../common/err-msg";
+
 const {connectForm, basicValidators: {required}} = require("bee-form-react");
 const cln = require("classnames");
 
@@ -13,7 +15,7 @@ const formConfig = {
 const ExampleDate = ({fv}) => (
     <div className="form">
 
-        {fv.withControl("meeting_date", ({bind, isValid, getError}) => (
+        {fv.withControl("meeting_date", ({bind, isValid, withError}) => (
             <div
                 className={cln("form-group", {"has-error": !isValid()})}
             >
@@ -23,9 +25,7 @@ const ExampleDate = ({fv}) => (
                     className="form-control"
                     placeholder="Meeting date... MM-DD-YYYY"
                 />
-                <p className="help-block">
-                    {getError()}
-                </p>
+                {withError(errMsg("Meeting date"))}
             </div>
         ))}
 

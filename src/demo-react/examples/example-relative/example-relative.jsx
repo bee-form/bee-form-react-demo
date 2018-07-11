@@ -1,3 +1,5 @@
+import {errMsg} from "../common/err-msg";
+
 const {connectForm, basicValidators: {required, email, minLength, equalsPath}} = require("bee-form-react");
 const cln = require("classnames");
 
@@ -12,7 +14,7 @@ const initData = {
 
 const ExampleRelative = ({fv}) => {
 
-    let renderField = (label, type, placeholder) => ({bind, isValid, getError}) => (
+    let renderField = (label, type, placeholder) => ({bind, isValid, withError}) => (
         <div
             className={cln("form-group", {"has-error": !isValid()})}
         >
@@ -23,9 +25,8 @@ const ExampleRelative = ({fv}) => {
                 className="form-control"
                 placeholder={placeholder}
             />
-            <p className="help-block">
-                {getError()}
-            </p>
+
+            {withError(errMsg(label))}
         </div>
     );
 

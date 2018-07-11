@@ -1,4 +1,5 @@
 import cln from "classnames";
+import {errMsg} from "../common/err-msg";
 
 const {connectForm, basicValidators: {required, email, minLength}} = require("bee-form-react");
 
@@ -14,7 +15,7 @@ const ExampleLogin = ({fv}) => (
     <div className="form">
 
         {/* Email input */}
-        {fv.withControl("email", ({bind, getError, hasError}) => (
+        {fv.withControl("email", ({bind, getError, hasError, withError}) => (
             <div
                 className={cln("form-group", {"has-error": hasError()})}
             >
@@ -25,14 +26,14 @@ const ExampleLogin = ({fv}) => (
                     className="form-control"
                     placeholder="Email"
                 />
-                <p className="help-block">
-                    {getError()}
-                </p>
+
+                {withError(errMsg("Email address"))}
+
             </div>
         ))}
 
         {/* Password input */}
-        {fv.withControl("password", ({bind, getError, hasError}) => (
+        {fv.withControl("password", ({bind, hasError, withError}) => (
             <div
                 className={cln("form-group", {"has-error": hasError()})}
             >
@@ -44,9 +45,7 @@ const ExampleLogin = ({fv}) => (
                     className="form-control"
                     placeholder="Password"
                 />
-                <p className="help-block">
-                    {getError()}
-                </p>
+                {withError(errMsg("Password"))}
             </div>
         ))}
 

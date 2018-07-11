@@ -51,7 +51,9 @@ export class ExampleBox extends RComponent {
 
                 <CodePanel
                     data={data}
-                    codes={codes}
+                    codes={codes.concat([
+                        {name: "err-msg.jsx", code: require("!raw-loader!./common/err-msg.jsx")},
+                    ])}
                 />
             </div>
         );

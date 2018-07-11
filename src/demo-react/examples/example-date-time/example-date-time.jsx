@@ -1,5 +1,6 @@
 import {dateStr} from "./tunnel-date-string";
 import {timeStr} from "./tunnel-time-string";
+import {errMsg} from "../common/err-msg";
 
 const {connectForm, basicValidators: {required}} = require("bee-form-react");
 const cln = require("classnames");
@@ -17,7 +18,7 @@ class ExampleDateTime extends React.Component {
     render() {
         const {fv} = this.props;
 
-        let r = (label, placeholder) => ({bind, isValid, getError}) => (
+        let r = (label, placeholder) => ({bind, isValid, withError}) => (
             <div
                 className={cln("form-group", {"has-error": !isValid()})}
             >
@@ -27,9 +28,7 @@ class ExampleDateTime extends React.Component {
                     className="form-control"
                     placeholder={placeholder}
                 />
-                <p className="help-block">
-                    {getError()}
-                </p>
+                {withError(errMsg(label))}
             </div>
         );
 

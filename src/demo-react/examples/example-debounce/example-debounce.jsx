@@ -1,3 +1,5 @@
+import {errMsg} from "../common/err-msg";
+
 const {connectForm, basicValidators: {required, equals}} = require("bee-form-react");
 const cln = require("classnames");
 
@@ -18,7 +20,7 @@ class ExampleDebounce extends React.Component {
             <div className="form">
 
                 {/* access_code input */}
-                {fv.withControl("promotion_code", ({isValid, bind, getError}) => (
+                {fv.withControl("promotion_code", ({isValid, bind, withError}) => (
                     <div
                         className={cln("form-group", {"has-error": !isValid()})}
                     >
@@ -29,9 +31,7 @@ class ExampleDebounce extends React.Component {
                             className="form-control"
                             placeholder="Promotion Code"
                         />
-                        <p className="help-block">
-                            {getError()}
-                        </p>
+                        {withError(errMsg("Promotion Code"))}
                     </div>
                 ))}
 

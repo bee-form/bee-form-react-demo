@@ -1,3 +1,5 @@
+import {errMsg} from "../common/err-msg";
+
 const {connectForm, basicValidators: {required}} = require("bee-form-react");
 const cln = require("classnames");
 
@@ -24,7 +26,7 @@ const ExampleAsync = ({fv}) => (
     <div className="form">
 
         {/* access_code input */}
-        {fv.withControl("promotion_code", ({isValid, bind, getError}) => (
+        {fv.withControl("promotion_code", ({isValid, bind, withError}) => (
             <div
                 className={cln("form-group", {"has-error": !isValid()})}
             >
@@ -35,9 +37,10 @@ const ExampleAsync = ({fv}) => (
                     className="form-control"
                     placeholder="Promotion Code"
                 />
-                <p className="help-block">
-                    {getError()}
-                </p>
+
+                {withError(errMsg("Promotion Code", {
+                    "promotion-code": () => `Invalid Promotion Code`
+                }))}
             </div>
         ))}
 
