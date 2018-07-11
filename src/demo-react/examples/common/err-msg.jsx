@@ -11,8 +11,6 @@ export const errBox = (label, additionalMessages) => (error) => (
 );
 
 const toMsg = (label, additionalMessages, error) => (
-    typeof error === "string" ?
-    {...defaultErrMsgs, ...additionalMessages}[error](label, error) :
     {...defaultErrMsgs, ...additionalMessages}[error.name](label, error)
 );
 
